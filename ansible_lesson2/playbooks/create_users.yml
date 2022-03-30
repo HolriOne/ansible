@@ -1,0 +1,22 @@
+---
+- name: Create new users
+  hosts: all
+  become: yes
+
+  vars:
+    password: 1q2w3e
+
+
+  tasks:
+  - name: Create users
+    user:
+      name: "{{ item }}"
+      comment: "{{ item }}@example.com"
+      createhome: true
+      password: "{{ password | password_hash('sha512') }}"
+      update_password: on_create
+    loop:
+      - Alice
+      - Bob
+      - Carol
+

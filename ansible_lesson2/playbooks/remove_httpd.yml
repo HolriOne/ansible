@@ -1,0 +1,15 @@
+---
+- name: Install Apache, open ports and copy html
+  hosts: all
+  become: yes
+
+
+  tasks:
+  - name: Remove html file
+    file: path=/var/www/html/index.html state=absent
+ 
+  - name: Remove Apache2
+    yum: name=httpd state=absent
+
+  - name: Stoped firewalld
+    service: name=firewalld state=stopped enabled=no

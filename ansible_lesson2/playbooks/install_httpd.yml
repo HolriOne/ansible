@@ -1,0 +1,33 @@
+---
+- name: Install Apache, open ports and copy html
+  hosts: all
+  become: yes
+
+
+  vars:
+    source_file: ./index.html
+    dest_file: /var/www/html
+
+
+  tasks:
+  - name: Install Apache2
+    yum: name=httpd state=latest
+
+  - name: Enable Apache2
+    service: name=httpd state=started enabled=yes
+
+  - name: Copy html file
+    copy: src={{ source_file }} dest={{ dest_file }}
+  
+
+  - name: Enable firewall
+    service: name=firewalld state=started enabled=yes
+
+  - name: Allow http/https
+    command: firewall-cmd --permanent --add-service=http
+
+  - name: Restart firewalld
+    service: name=firewalld state=restarted
+
+  - name: Restart Apache2
+    service: name=httpd state=restarted

@@ -1,0 +1,9 @@
+---
+- name: Add new parameters grub 
+  hosts: all
+  become: yes
+
+
+  tasks:
+  - name: Add new parameters
+    lineinfile: state=present dest=/etc/default/grub backrefs=yes regexp='^(GRUB_CMDLINE_LINUX=(?!.* audit)\"[^\"]+)(\".*)' line='\1 net.iframe=0 audit=1 \2'
